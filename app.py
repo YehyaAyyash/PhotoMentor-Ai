@@ -1,16 +1,17 @@
 import streamlit as st
-import google.generativeai as genai
+from openai import OpenAI
 from PIL import Image
 import os
-from dotenv import load_dotenv
+import base64
 import io
+from dotenv import load_dotenv
 
 load_dotenv()
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="PhotoMentor AI",
-    page_icon="📷",
+    page_icon=":camera:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -18,33 +19,7 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    /* Main background */
     .stApp { background-color: #0e1117; }
-
-    /* Card-style containers */
-    .tip-card {
-        background: linear-gradient(135deg, #1e2130, #252840);
-        border-left: 4px solid #f0a500;
-        border-radius: 10px;
-        padding: 16px 20px;
-        margin: 10px 0;
-        color: #e8e8e8;
-    }
-    .section-header {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #f0a500;
-        margin-bottom: 6px;
-        letter-spacing: 0.5px;
-    }
-    .course-card {
-        background: linear-gradient(135deg, #1a2a1a, #1e301e);
-        border-left: 4px solid #4caf50;
-        border-radius: 10px;
-        padding: 14px 18px;
-        margin: 8px 0;
-        color: #d4f0d4;
-    }
     .hero-title {
         font-size: 2.4rem;
         font-weight: 800;
@@ -80,16 +55,25 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── Gemini setup ──────────────────────────────────────────────────────────────
-def get_model():
-    api_key = os.getenv("GEMINI_API_KEY") or st.session_state.get("api_key", "")
+# ── OpenAI client ─────────────────────────────────────────────────────────────
+def get_client():
+    api_key = os.getenv("OPENAI_API_KEY") or st.session_state.get("api_key", "")
     if not api_key:
         return None
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel("gemini-1.5-flash")
+    return OpenAI(api_key=api_key)
 
 
-# ── Prompt builder ────────────────────────────────────────────────────────────
+# ── Image → base64 ────────────────────────────────────────────────────────────
+def image_to_base64(image: Image.Image) -> str:
+    buffer = io.BytesIO()
+    fmt = image.format or "JPEG"
+    if fmt not in ("JPEG", "PNG", "WEBP"):
+        fmt = "JPEG"
+    image.save(buffer, format=fmt)
+    return base64.b64encode(buffer.getvalue()).decode("utf-8"), fmt.lower()
+
+
+# ── Prompt ────────────────────────────────────────────────────────────────────
 ANALYSIS_PROMPT = """
 You are PhotoMentor, an expert photography coach helping beginners learn from real images.
 
@@ -149,36 +133,57 @@ End with one encouraging sentence for the beginner.
 """
 
 
-# ── Analysis function ─────────────────────────────────────────────────────────
-def analyse_image(model, image: Image.Image, extra_context: str = "") -> str:
+# ── Analysis ──────────────────────────────────────────────────────────────────
+def analyse_image(client: OpenAI, image: Image.Image, extra_context: str = "") -> str:
+    b64, fmt = image_to_base64(image)
     prompt = ANALYSIS_PROMPT
     if extra_context.strip():
         prompt += f"\n\nExtra context from the user: {extra_context.strip()}"
-    response = model.generate_content([prompt, image])
-    return response.text
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/{fmt};base64,{b64}",
+                            "detail": "high",
+                        },
+                    },
+                ],
+            }
+        ],
+        max_tokens=2000,
+    )
+    return response.choices[0].message.content
 
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## ⚙️ Configuration")
     api_key_input = st.text_input(
-        "Gemini API Key",
+        "OpenAI API Key",
         type="password",
-        placeholder="Paste your free API key here",
-        help="Get a free key at aistudio.google.com",
+        placeholder="sk-...",
+        help="Get a key at platform.openai.com",
     )
     if api_key_input:
         st.session_state["api_key"] = api_key_input
         st.success("API key saved for this session.")
 
     st.markdown("---")
-    st.markdown("### How to get a free API key")
+    st.markdown("### How to get an API key")
     st.markdown(
         """
-1. Go to **aistudio.google.com**
-2. Sign in with your Google account
-3. Click **Get API Key → Create API Key**
-4. Paste it above
+1. Go to **platform.openai.com**
+2. Sign in → **API Keys → Create new secret key**
+3. Paste it above
+
+**Cost:** ~$0.001 per analysis (very cheap)
         """
     )
     st.markdown("---")
@@ -193,7 +198,7 @@ with st.sidebar:
         """
     )
     st.markdown("---")
-    st.caption("Powered by Google Gemini 1.5 Flash (free tier)")
+    st.caption("Powered by OpenAI GPT-4o Mini")
 
 
 # ── Main UI ───────────────────────────────────────────────────────────────────
@@ -214,7 +219,7 @@ with col_upload:
         label_visibility="collapsed",
     )
     st.markdown(
-        '<div class="upload-hint">Supports JPG, PNG, WEBP · Max 200 MB</div>',
+        '<div class="upload-hint">Supports JPG, PNG, WEBP · Max 20 MB</div>',
         unsafe_allow_html=True,
     )
 
@@ -237,31 +242,23 @@ with col_result:
         st.info("Upload a photo on the left to get started.")
 
     elif analyse_btn:
-        model = get_model()
-        if not model:
-            st.error(
-                "No API key found. Please enter your Gemini API key in the sidebar."
-            )
+        client = get_client()
+        if not client:
+            st.error("No API key found. Please enter your OpenAI API key in the sidebar.")
         else:
             with st.spinner("Analysing your photo… this takes 10–20 seconds"):
                 try:
-                    result = analyse_image(model, image, extra_context)
+                    result = analyse_image(client, image, extra_context)
                     st.session_state["last_result"] = result
                     st.session_state["last_image_name"] = uploaded_file.name
                 except Exception as e:
                     st.error(f"Analysis failed: {e}")
 
-    # Render last result
     if "last_result" in st.session_state:
-        result_text = st.session_state["last_result"]
-
-        # Render as markdown (the model returns structured markdown)
-        st.markdown(result_text)
-
-        # Download button
+        st.markdown(st.session_state["last_result"])
         st.download_button(
             label="Download Analysis as .txt",
-            data=result_text,
+            data=st.session_state["last_result"],
             file_name=f"photomentor_{st.session_state.get('last_image_name', 'analysis')}.txt",
             mime="text/plain",
         )
@@ -269,6 +266,6 @@ with col_result:
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown(
-    "<center><small>PhotoMentor AI · Built with Streamlit & Google Gemini · Free to use</small></center>",
+    "<center><small>PhotoMentor AI · Built with Streamlit & OpenAI GPT-4o Mini</small></center>",
     unsafe_allow_html=True,
 )
