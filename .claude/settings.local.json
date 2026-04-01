@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(streamlit run:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(powershell -Command \"Remove-Item ''C:\\\\Users\\\\Yahya\\\\Desktop\\\\SLIIT\\\\Projects\\\\Project 1\\\\.git\\\\index.lock'' -Force -ErrorAction SilentlyContinue; Write-Output ''done''\")"
     ]
   }
 }
