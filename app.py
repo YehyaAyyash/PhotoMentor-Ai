@@ -17,8 +17,8 @@ st.set_page_config(
 )
 
 # ── Brand colours ─────────────────────────────────────────────────────────────
-PRIMARY   = "#25671E"   # brand green
-PRIMARY_L = "#2e8024"   # lighter green (hover / glow)
+PRIMARY   = "#8FD14F"   # brand green
+PRIMARY_L = "#a3e063"   # lighter green (hover / glow)
 BG        = "#0d0d0d"   # page background
 BG2       = "#141414"   # card / bubble background
 BG3       = "#1a1a1a"   # input / sidebar background
@@ -315,15 +315,15 @@ with st.sidebar:
         <div style="display:flex;align-items:center;gap:10px;padding:8px 0 16px 0;">
           <img src="data:image/png;base64,{b64_logo}"
                style="height:38px;width:38px;border-radius:8px;
-                      border:1.5px solid #25671E;padding:3px;background:#111;">
+                      border:1.5px solid #8FD14F;padding:3px;background:#111;">
           <div>
-            <div style="font-weight:800;color:#25671E;font-size:0.95rem;line-height:1.1;">PixelPulse</div>
+            <div style="font-weight:800;color:#8FD14F;font-size:0.95rem;line-height:1.1;">PixelPulse</div>
             <div style="font-size:0.7rem;color:#555;text-transform:uppercase;letter-spacing:0.5px;">Innovation AI</div>
           </div>
         </div>
         """, unsafe_allow_html=True)
     else:
-        st.markdown("<div style='font-weight:800;color:#25671E;font-size:1rem;padding:8px 0 16px 0;'>PixelPulse Innovation AI</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:800;color:#8FD14F;font-size:1rem;padding:8px 0 16px 0;'>PixelPulse Innovation AI</div>", unsafe_allow_html=True)
 
     st.markdown("### ⚙️ Setup")
     api_key_input = st.text_input("OpenAI API Key", type="password", placeholder="sk-...")
@@ -363,7 +363,7 @@ if os.path.exists(logo_path):
 else:
     st.markdown("""
     <div class="brand-header">
-      <div style="background:#25671E;color:#fff;font-weight:900;font-size:1.1rem;
+      <div style="background:#8FD14F;color:#fff;font-weight:900;font-size:1.1rem;
                   width:52px;height:52px;border-radius:10px;display:flex;
                   align-items:center;justify-content:center;">PPI</div>
       <div>
