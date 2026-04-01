@@ -10,98 +10,224 @@ load_dotenv()
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="PhotoMentor AI",
-    page_icon=":camera:",
+    page_title="PixelPulse Innovation AI",
+    page_icon="assets/logo.png" if os.path.exists("assets/logo.png") else ":camera:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
+# ── Brand colours ─────────────────────────────────────────────────────────────
+PRIMARY   = "#25671E"   # brand green
+PRIMARY_L = "#2e8024"   # lighter green (hover / glow)
+BG        = "#0d0d0d"   # page background
+BG2       = "#141414"   # card / bubble background
+BG3       = "#1a1a1a"   # input / sidebar background
+BORDER    = "#1f1f1f"   # subtle border
+TEXT      = "#e4e4e4"
+MUTED     = "#666666"
+
 # ── Custom CSS ────────────────────────────────────────────────────────────────
-st.markdown("""
+st.markdown(f"""
 <style>
-    .stApp { background-color: #0e1117; color: #e8e8e8; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
-    /* Hide default streamlit branding */
-    #MainMenu, footer { visibility: hidden; }
+    html, body, .stApp {{
+        background-color: {BG};
+        color: {TEXT};
+        font-family: 'Inter', sans-serif;
+    }}
 
-    /* Hero */
-    .hero { text-align: center; padding: 1.5rem 0 0.5rem 0; }
-    .hero h1 { font-size: 2rem; font-weight: 800; color: #f0a500; margin: 0; }
-    .hero p  { color: #888; font-size: 0.95rem; margin-top: 4px; }
+    /* Scrollbar */
+    ::-webkit-scrollbar {{ width: 6px; }}
+    ::-webkit-scrollbar-track {{ background: {BG}; }}
+    ::-webkit-scrollbar-thumb {{ background: {PRIMARY}; border-radius: 4px; }}
 
-    /* Chat bubbles */
-    .bubble-user {
-        background: #1e293b;
+    /* Hide Streamlit chrome */
+    #MainMenu, footer, header {{ visibility: hidden; }}
+    .block-container {{ padding-top: 1rem !important; }}
+
+    /* ── Sidebar ── */
+    [data-testid="stSidebar"] {{
+        background-color: {BG3} !important;
+        border-right: 1px solid {BORDER};
+    }}
+    [data-testid="stSidebar"] * {{ color: {TEXT} !important; }}
+
+    /* ── Logo / Hero ── */
+    .brand-header {{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 1.2rem 0 0.4rem 0;
+    }}
+    .brand-header img {{
+        height: 52px;
+        width: 52px;
+        object-fit: contain;
+        border-radius: 10px;
+        border: 1.5px solid {PRIMARY};
+        padding: 4px;
+        background: #111;
+    }}
+    .brand-title {{
+        font-size: 1.7rem;
+        font-weight: 800;
+        color: {PRIMARY};
+        letter-spacing: -0.5px;
+        line-height: 1.1;
+    }}
+    .brand-sub {{
+        font-size: 0.75rem;
+        color: {MUTED};
+        margin-top: 2px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }}
+    .brand-tagline {{
+        text-align: center;
+        color: {MUTED};
+        font-size: 0.88rem;
+        padding-bottom: 0.8rem;
+    }}
+
+    /* ── Divider ── */
+    hr {{ border-color: {BORDER} !important; }}
+
+    /* ── Chat bubbles ── */
+    .bubble-user {{
+        background: #1b2b1b;
+        border: 1px solid {PRIMARY}44;
         border-radius: 16px 16px 4px 16px;
         padding: 12px 16px;
-        margin: 8px 0;
-        max-width: 85%;
-        margin-left: auto;
-        color: #e2e8f0;
-        font-size: 0.9rem;
-    }
-    .bubble-ai {
-        background: #1a1f2e;
-        border-left: 3px solid #f0a500;
+        margin: 8px 0 8px auto;
+        max-width: 82%;
+        color: {TEXT};
+        font-size: 0.88rem;
+    }}
+    .bubble-ai {{
+        background: {BG2};
+        border-left: 3px solid {PRIMARY};
         border-radius: 4px 16px 16px 16px;
         padding: 14px 18px;
         margin: 8px 0;
-        max-width: 95%;
-        color: #e2e8f0;
-        font-size: 0.9rem;
-        line-height: 1.6;
-    }
-    .bubble-ai h2 {
-        font-size: 0.95rem;
-        color: #f0a500;
-        margin: 14px 0 4px 0;
-        border-bottom: 1px solid #2a2f3e;
-        padding-bottom: 4px;
-    }
-    .bubble-ai ul { padding-left: 18px; margin: 4px 0; }
-    .bubble-ai li { margin-bottom: 3px; }
-    .bubble-ai strong { color: #fbbf24; }
+        max-width: 96%;
+        color: {TEXT};
+        font-size: 0.88rem;
+        line-height: 1.65;
+        box-shadow: 0 2px 12px #00000033;
+    }}
+    .bubble-ai h2 {{
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: {PRIMARY_L};
+        margin: 12px 0 4px 0;
+        border-bottom: 1px solid {BORDER};
+        padding-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }}
+    .bubble-ai ul {{ padding-left: 16px; margin: 4px 0 8px 0; }}
+    .bubble-ai li {{ margin-bottom: 4px; }}
+    .bubble-ai strong {{ color: #5dba52; }}
 
-    /* Tag badges */
-    .tag {
+    /* ── Avatar chips ── */
+    .avatar-ppi {{
         display: inline-block;
-        background: #252840;
-        border: 1px solid #f0a500;
-        color: #f0a500;
-        border-radius: 20px;
-        padding: 2px 10px;
-        font-size: 0.75rem;
-        margin: 2px 3px;
-    }
-
-    /* Upload area */
-    .upload-box {
-        background: #161b27;
-        border: 1.5px dashed #2d3748;
-        border-radius: 12px;
-        padding: 20px;
+        background: {PRIMARY};
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.7rem;
+        border-radius: 50%;
+        width: 26px; height: 26px;
+        line-height: 26px;
         text-align: center;
-    }
+        margin-right: 6px;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }}
+    .msg-row {{
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin: 6px 0;
+    }}
 
-    /* Analyse button */
-    .stButton > button {
-        background: linear-gradient(90deg, #f0a500, #e07b00);
-        color: #000;
+    /* ── Tag badges ── */
+    .tag {{
+        display: inline-block;
+        background: #1b2b1b;
+        border: 1px solid {PRIMARY}66;
+        color: {PRIMARY_L};
+        border-radius: 20px;
+        padding: 3px 12px;
+        font-size: 0.74rem;
+        margin: 3px 4px;
+        font-weight: 600;
+    }}
+
+    /* ── Analyse button ── */
+    .stButton > button {{
+        background: linear-gradient(135deg, {PRIMARY}, {PRIMARY_L});
+        color: #fff !important;
         font-weight: 700;
         border: none;
         border-radius: 8px;
         width: 100%;
+        padding: 11px;
+        font-size: 0.92rem;
+        letter-spacing: 0.3px;
+        transition: all 0.2s;
+        box-shadow: 0 0 12px {PRIMARY}55;
+    }}
+    .stButton > button:hover {{
+        box-shadow: 0 0 20px {PRIMARY}99;
+        transform: translateY(-1px);
+    }}
+    .stButton > button:disabled {{
+        opacity: 0.3;
+        cursor: not-allowed;
+        box-shadow: none;
+    }}
+
+    /* ── File uploader & textarea ── */
+    [data-testid="stFileUploader"] {{
+        background: {BG3};
+        border: 1.5px dashed {PRIMARY}55;
+        border-radius: 10px;
         padding: 10px;
+    }}
+    textarea {{
+        background: {BG3} !important;
+        border: 1px solid {BORDER} !important;
+        color: {TEXT} !important;
+        border-radius: 8px !important;
+    }}
+
+    /* ── Empty state ── */
+    .empty-state {{
+        text-align: center;
+        padding: 3rem 0 1.5rem 0;
+        color: #333;
+    }}
+    .empty-icon {{
+        font-size: 3.5rem;
+        filter: grayscale(0.3);
+    }}
+    .empty-text {{
         font-size: 0.95rem;
-    }
-    .stButton > button:hover { opacity: 0.88; }
-    .stButton > button:disabled { opacity: 0.4; cursor: not-allowed; }
+        color: #444;
+        margin-top: 10px;
+    }}
+
+    /* ── Spinner ── */
+    .stSpinner > div {{ border-top-color: {PRIMARY} !important; }}
 </style>
 """, unsafe_allow_html=True)
 
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def get_client():
-    # Priority: sidebar input → .env → Streamlit Cloud secrets
     api_key = (
         st.session_state.get("api_key")
         or os.getenv("OPENAI_API_KEY")
@@ -119,20 +245,25 @@ def image_to_base64(image: Image.Image):
     image.save(buffer, format=fmt)
     return base64.b64encode(buffer.getvalue()).decode(), fmt.lower()
 
+def logo_to_base64(path: str) -> str:
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
 # ── Prompt ────────────────────────────────────────────────────────────────────
 PROMPT = """
-You are PhotoMentor, a friendly expert photography coach. Analyse the image and reply in this exact format — keep each section SHORT and punchy (2-4 bullet points max per section). Use simple language for beginners.
+You are PixelPulse AI, a friendly expert photography coach. Analyse the image and reply in this exact format.
+Keep each section SHORT and punchy (2-4 bullet points max). Use simple language for beginners.
 
 ## ✨ Shot Summary
-One sentence describing what kind of shot this is and what makes it work.
+One sentence: what kind of shot this is and what makes it stand out.
 
 ## 🔆 Lighting
-- Light type & direction (e.g. "Soft side light from a window")
+- Light type & direction (e.g. "Soft window side-light")
 - Quality: hard / soft / diffused
 - Mood it creates
 
 ## 📷 Camera Settings (estimated)
-- **Aperture:** f/X — [effect]
+- **Aperture:** f/X — [depth of field effect]
 - **Shutter:** 1/Xs
 - **ISO:** X
 - **Focal Length:** Xmm
@@ -141,20 +272,18 @@ One sentence describing what kind of shot this is and what makes it work.
 3 clear steps a beginner can follow right now.
 
 ## 🏆 Pro Tip
-One standout technique used in this shot. One common mistake to avoid.
+One standout technique used. One common beginner mistake to avoid.
 
 ## 🎓 Learn More
-2 course recommendations relevant to this style:
+2 course picks matched to this style:
 - **[Platform] Course Name** — why it fits · Free / ~$X
 
-Keep the whole response under 350 words. End with one short motivating line.
+Under 350 words total. End with one short motivating line.
 """
 
 def analyse_image(client, image: Image.Image, extra_context: str = "") -> str:
     b64, fmt = image_to_base64(image)
-    prompt = PROMPT
-    if extra_context.strip():
-        prompt += f"\n\nUser note: {extra_context.strip()}"
+    prompt = PROMPT + (f"\n\nUser note: {extra_context.strip()}" if extra_context.strip() else "")
     resp = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{
@@ -171,19 +300,36 @@ def analyse_image(client, image: Image.Image, extra_context: str = "") -> str:
     )
     return resp.choices[0].message.content
 
-# ── Session state init ────────────────────────────────────────────────────────
+
+# ── Session state ─────────────────────────────────────────────────────────────
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
+    # Logo + brand in sidebar
+    logo_path = "assets/logo.png"
+    if os.path.exists(logo_path):
+        b64_logo = logo_to_base64(logo_path)
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0 16px 0;">
+          <img src="data:image/png;base64,{b64_logo}"
+               style="height:38px;width:38px;border-radius:8px;
+                      border:1.5px solid #25671E;padding:3px;background:#111;">
+          <div>
+            <div style="font-weight:800;color:#25671E;font-size:0.95rem;line-height:1.1;">PixelPulse</div>
+            <div style="font-size:0.7rem;color:#555;text-transform:uppercase;letter-spacing:0.5px;">Innovation AI</div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("<div style='font-weight:800;color:#25671E;font-size:1rem;padding:8px 0 16px 0;'>PixelPulse Innovation AI</div>", unsafe_allow_html=True)
+
     st.markdown("### ⚙️ Setup")
-    api_key_input = st.text_input(
-        "OpenAI API Key", type="password", placeholder="sk-..."
-    )
+    api_key_input = st.text_input("OpenAI API Key", type="password", placeholder="sk-...")
     if api_key_input:
         st.session_state["api_key"] = api_key_input
-        st.success("Key saved.")
+        st.success("Key saved ✓")
 
     st.markdown("---")
     st.markdown("""
@@ -192,33 +338,75 @@ with st.sidebar:
 2. API Keys → Create new key
 3. Paste above
 
-**Cost:** ~$0.001 per photo
+**Cost:** ~$0.001 per analysis
 """)
     st.markdown("---")
     if st.button("🗑️ Clear Chat"):
         st.session_state.messages = []
         st.rerun()
     st.markdown("---")
-    st.caption("PhotoMentor AI · GPT-4o Mini")
+    st.caption("PixelPulse Innovation AI · GPT-4o Mini")
 
 # ── Header ────────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="hero">
-  <h1>📷 PhotoMentor AI</h1>
-  <p>Upload a photo and get instant photography coaching</p>
-</div>
-""", unsafe_allow_html=True)
+logo_path = "assets/logo.png"
+if os.path.exists(logo_path):
+    b64_logo = logo_to_base64(logo_path)
+    st.markdown(f"""
+    <div class="brand-header">
+      <img src="data:image/png;base64,{b64_logo}" alt="logo">
+      <div>
+        <div class="brand-title">PixelPulse Innovation AI</div>
+        <div class="brand-sub">Photography Coaching · Powered by GPT-4o Mini</div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <div class="brand-header">
+      <div style="background:#25671E;color:#fff;font-weight:900;font-size:1.1rem;
+                  width:52px;height:52px;border-radius:10px;display:flex;
+                  align-items:center;justify-content:center;">PPI</div>
+      <div>
+        <div class="brand-title">PixelPulse Innovation AI</div>
+        <div class="brand-sub">Photography Coaching · Powered by GPT-4o Mini</div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown('<div class="brand-tagline">Upload any photo and get instant AI photography coaching</div>', unsafe_allow_html=True)
+st.markdown("---")
 
 # ── Chat history ──────────────────────────────────────────────────────────────
-chat_container = st.container()
-with chat_container:
-    for msg in st.session_state.messages:
-        if msg["role"] == "user":
-            if msg.get("image"):
-                st.image(msg["image"], width=280)
-            st.markdown(f'<div class="bubble-user">{msg["content"]}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<div class="bubble-ai">{msg["content"]}</div>', unsafe_allow_html=True)
+for msg in st.session_state.messages:
+    if msg["role"] == "user":
+        if msg.get("image"):
+            col_sp, col_img = st.columns([0.05, 0.95])
+            with col_img:
+                st.image(msg["image"], width=260)
+        st.markdown(f'<div class="bubble-user">{msg["content"]}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+        <div class="msg-row">
+          <span class="avatar-ppi">AI</span>
+          <div class="bubble-ai">{msg["content"]}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ── Empty state ───────────────────────────────────────────────────────────────
+if not st.session_state.messages:
+    st.markdown("""
+    <div class="empty-state">
+      <div class="empty-icon">📷</div>
+      <div class="empty-text">Upload a photo below to get instant coaching</div>
+      <div style="margin-top:14px;">
+        <span class="tag">Lighting Analysis</span>
+        <span class="tag">Camera Settings</span>
+        <span class="tag">Recreation Guide</span>
+        <span class="tag">Pro Tips</span>
+        <span class="tag">Course Picks</span>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ── Input area ────────────────────────────────────────────────────────────────
 st.markdown("---")
@@ -234,9 +422,9 @@ with col_file:
 
 with col_ctx:
     extra_context = st.text_area(
-        "Add context (optional)",
-        placeholder="e.g. 'taken at sunset with a phone'…",
-        height=80,
+        "Add context",
+        placeholder="Optional: e.g. 'portrait taken indoors at night'…",
+        height=82,
         label_visibility="collapsed"
     )
     analyse_btn = st.button("📸 Analyse Photo", disabled=uploaded_file is None)
@@ -248,48 +436,25 @@ if analyse_btn and uploaded_file:
         st.error("Please enter your OpenAI API key in the sidebar.")
     else:
         image = Image.open(uploaded_file)
-
-        # Add user message to history
         user_text = f"Analyse this photo{': ' + extra_context.strip() if extra_context.strip() else '.'}"
         st.session_state.messages.append({
             "role": "user",
             "content": user_text,
             "image": image.copy()
         })
-
         with st.spinner("Analysing your photo…"):
             try:
                 result = analyse_image(client, image, extra_context)
-                # Convert markdown to HTML-safe for bubble rendering
-                st.session_state.messages.append({
-                    "role": "assistant",
-                    "content": result
-                })
+                st.session_state.messages.append({"role": "assistant", "content": result})
             except Exception as e:
                 st.session_state.messages.append({
                     "role": "assistant",
-                    "content": f"Sorry, analysis failed: {e}"
+                    "content": f"Analysis failed: {e}"
                 })
-
         st.rerun()
-
-# ── Empty state ───────────────────────────────────────────────────────────────
-if not st.session_state.messages:
-    st.markdown("""
-<div style="text-align:center; padding: 2rem 0; color: #555;">
-  <div style="font-size: 3rem;">📷</div>
-  <div style="font-size: 1rem; margin-top: 8px;">Upload a photo below to get started</div>
-  <div style="margin-top: 12px;">
-    <span class="tag">Lighting Analysis</span>
-    <span class="tag">Camera Settings</span>
-    <span class="tag">Pro Tips</span>
-    <span class="tag">Course Picks</span>
-  </div>
-</div>
-""", unsafe_allow_html=True)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown(
-    "<center><small style='color:#444'>PhotoMentor AI · Built with Streamlit & Yahya</small></center>",
+    f"<center><small style='color:#2a2a2a;'>PixelPulse Innovation AI · Built by Yahya Ayyash</small></center>",
     unsafe_allow_html=True,
 )
