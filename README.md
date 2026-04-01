@@ -2,7 +2,7 @@
 
 <img src="assets/logo.png" alt="PixelPulse Innovation AI Logo" width="100"/>
 
-# PixelPulse Innovation AI
+# Pixel Pulse Innovation AI
 
 **An AI-powered photography coaching chatbot that analyses any photo and teaches beginners how to master it.**
 
