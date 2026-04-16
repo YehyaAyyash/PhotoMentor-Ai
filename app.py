@@ -75,43 +75,43 @@ html, body, .stApp {{
 
 /* Sidebar nav (radio styled as menu) */
 [data-testid="stSidebar"] div[data-testid="stRadio"] {{
-    padding: 0 0.5rem;
+    padding: 0 0.4rem;
 }}
 [data-testid="stSidebar"] div[data-testid="stRadio"] > div {{
     display: flex !important;
     flex-direction: column !important;
-    gap: 2px;
+    gap: 3px;
 }}
+/* Each nav item label */
 [data-testid="stSidebar"] div[data-testid="stRadio"] label {{
     display: flex !important;
-    align-items: center;
-    padding: 9px 14px !important;
+    align-items: center !important;
+    padding: 10px 14px !important;
     border-radius: 9px !important;
-    font-size: 0.88rem !important;
+    font-size: 0.9rem !important;
     font-weight: 600 !important;
     color: {MUTED} !important;
-    cursor: pointer;
-    transition: all 0.15s;
+    cursor: pointer !important;
+    transition: background 0.15s, color 0.15s !important;
     margin: 0 !important;
+    width: 100% !important;
 }}
 [data-testid="stSidebar"] div[data-testid="stRadio"] label:hover {{
-    background: #1a1a1a !important;
+    background: #1e1e1e !important;
     color: {TEXT} !important;
 }}
-[data-testid="stSidebar"] div[data-testid="stRadio"] label[data-baseweb] {{
-    background: transparent;
+/* Hide only the radio circle indicator, keep the text */
+[data-testid="stSidebar"] div[data-testid="stRadio"] [data-baseweb="radio"] {{
+    display: none !important;
 }}
-/* Selected nav item */
-[data-testid="stSidebar"] div[role="radiogroup"] div:has(input:checked) label {{
+/* Active/selected nav item */
+[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) {{
     background: #1b2b1b !important;
     color: {GREEN} !important;
 }}
-/* Hide radio circles */
-[data-testid="stSidebar"] div[data-testid="stRadio"] input[type="radio"] {{
-    display: none !important;
-}}
-[data-testid="stSidebar"] div[data-testid="stRadio"] div[data-testid="stMarkdownContainer"] {{
-    display: none !important;
+[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) p {{
+    color: {GREEN} !important;
+    font-weight: 700 !important;
 }}
 
 /* Session list */
@@ -240,37 +240,69 @@ html, body, .stApp {{
     box-shadow: 0 4px 32px {GREEN}11;
 }}
 
-/* File uploader hidden label, icon only */
+/* ── Upload as "+" icon only — no box ─────────── */
 .upload-icon-wrap [data-testid="stFileUploader"] {{
     background: transparent !important;
     border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }}
+/* Entire dropzone becomes the icon button */
 .upload-icon-wrap [data-testid="stFileUploaderDropzone"] {{
     background: transparent !important;
     border: none !important;
-    padding: 4px !important;
+    padding: 0 !important;
     min-height: unset !important;
-    border-radius: 8px;
-    width: 36px; height: 36px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: background 0.15s;
+    width: 38px !important;
+    height: 38px !important;
+    overflow: hidden !important;
 }}
-.upload-icon-wrap [data-testid="stFileUploaderDropzone"]:hover {{
-    background: {GREEN}11 !important;
-}}
+/* Hide drag-drop text completely */
 .upload-icon-wrap [data-testid="stFileUploaderDropzoneInstructions"] {{
     display: none !important;
 }}
+/* Hide the SVG cloud icon */
+.upload-icon-wrap [data-testid="stFileUploaderDropzone"] svg {{
+    display: none !important;
+}}
+/* Style browse button as "+" circle */
 .upload-icon-wrap [data-testid="stFileUploader"] button {{
+    background: {BG2} !important;
+    border: 1.5px solid {BORDER} !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-height: unset !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s !important;
+    box-shadow: none !important;
+}}
+.upload-icon-wrap [data-testid="stFileUploader"] button:hover {{
+    border-color: {GREEN}88 !important;
+    background: #1b2b1b !important;
+    box-shadow: 0 0 10px {GREEN}22 !important;
+    transform: none !important;
+}}
+/* Hide "Browse files" text, replace with + symbol */
+.upload-icon-wrap [data-testid="stFileUploader"] button span {{
     display: none !important;
 }}
-.upload-icon-wrap [data-testid="stFileUploader"] small {{
-    display: none !important;
+.upload-icon-wrap [data-testid="stFileUploader"] button::after {{
+    content: "＋";
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: {MUTED};
+    line-height: 1;
 }}
-.upload-icon-wrap [data-testid="stFileUploader"] svg {{
-    color: {MUTED} !important;
-    width: 20px !important; height: 20px !important;
+.upload-icon-wrap [data-testid="stFileUploader"] button:hover::after {{
+    color: {GREEN};
+}}
+/* Hide size limit note */
+.upload-icon-wrap small {{
+    display: none !important;
 }}
 
 /* Text area inside input bar — no border, transparent */
