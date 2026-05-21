@@ -29,7 +29,7 @@ MUTED  = "#555"
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 html, body, .stApp {{
     background: {BG};
@@ -40,7 +40,7 @@ html, body, .stApp {{
 ::-webkit-scrollbar-track {{ background: {BG}; }}
 ::-webkit-scrollbar-thumb {{ background: {GREEN}55; border-radius: 4px; }}
 #MainMenu, footer, header {{ visibility: hidden; }}
-.block-container {{ padding-top: 1rem !important; padding-bottom: 6rem !important; }}
+.block-container {{ padding-top: 0.5rem !important; padding-bottom: 6rem !important; }}
 
 /* ── Sidebar ─────────────────────────────────── */
 [data-testid="stSidebar"] {{
@@ -49,7 +49,6 @@ html, body, .stApp {{
 }}
 [data-testid="stSidebar"] > div {{ padding-top: 0 !important; }}
 
-/* Sidebar brand block */
 .sb-brand {{
     text-align: center;
     padding: 1.4rem 1rem 1rem 1rem;
@@ -57,23 +56,23 @@ html, body, .stApp {{
     margin-bottom: 0.5rem;
 }}
 .sb-brand img {{
-    width: 62px; height: 62px;
-    border-radius: 16px;
+    width: 56px; height: 56px;
+    border-radius: 14px;
     border: 2px solid {GREEN};
-    padding: 5px; background: #111;
+    padding: 4px; background: #111;
     display: block; margin: 0 auto 10px auto;
+    box-shadow: 0 0 18px {GREEN}33;
 }}
 .sb-name {{
-    font-size: 1rem; font-weight: 800;
+    font-size: 0.92rem; font-weight: 800;
     color: {GREEN}; line-height: 1.2;
 }}
 .sb-tagline {{
-    font-size: 0.68rem; color: {MUTED};
+    font-size: 0.65rem; color: {MUTED};
     text-transform: uppercase; letter-spacing: 0.6px;
     margin-top: 3px;
 }}
 
-/* Sidebar nav (radio styled as menu) */
 [data-testid="stSidebar"] div[data-testid="stRadio"] {{
     padding: 0 0.4rem;
 }}
@@ -82,7 +81,6 @@ html, body, .stApp {{
     flex-direction: column !important;
     gap: 3px;
 }}
-/* Each nav item label */
 [data-testid="stSidebar"] div[data-testid="stRadio"] label {{
     display: flex !important;
     align-items: center !important;
@@ -100,11 +98,9 @@ html, body, .stApp {{
     background: #1e1e1e !important;
     color: {TEXT} !important;
 }}
-/* Hide only the radio circle indicator, keep the text */
 [data-testid="stSidebar"] div[data-testid="stRadio"] [data-baseweb="radio"] {{
     display: none !important;
 }}
-/* Active/selected nav item */
 [data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) {{
     background: #1b2b1b !important;
     color: {GREEN} !important;
@@ -114,7 +110,6 @@ html, body, .stApp {{
     font-weight: 700 !important;
 }}
 
-/* Session list */
 .sess-item {{
     background: {BG3};
     border: 1px solid {BORDER};
@@ -129,7 +124,6 @@ html, body, .stApp {{
 }}
 .sess-active {{ border-color: {GREEN}66 !important; background: #1b2b1b !important; }}
 
-/* Sidebar buttons */
 [data-testid="stSidebar"] .stButton > button {{
     background: transparent !important;
     color: {MUTED} !important;
@@ -148,28 +142,92 @@ html, body, .stApp {{
     transform: none !important;
 }}
 
-/* ── Main header ─────────────────────────────── */
-.main-header {{
-    text-align: center;
-    padding: 1.2rem 0 0.5rem 0;
+/* ── Greeting header (chat empty state) ──────── */
+.greeting-header {{
+    padding: 2rem 0.5rem 2rem 0.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(180deg, #0e190e 0%, {BG} 100%);
     border-bottom: 1px solid {BORDER};
-    margin-bottom: 1.2rem;
 }}
-.main-header img {{
-    width: 56px; height: 56px;
-    border-radius: 14px;
-    border: 2px solid {GREEN};
-    padding: 4px; background: #111;
-    display: block; margin: 0 auto 10px auto;
+.greeting-top-bar {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.6rem;
 }}
-.main-title {{
-    font-size: 1.5rem; font-weight: 800;
-    color: {GREEN}; letter-spacing: -0.3px;
+.premium-badge {{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #1b2b1b;
+    border: 1px solid {GREEN}44;
+    color: {GREEN};
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
 }}
-.main-sub {{
-    font-size: 0.8rem; color: {MUTED};
-    margin-top: 4px; text-transform: uppercase;
-    letter-spacing: 0.5px;
+.user-avatar {{
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, {GREEN}, {GLOW});
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.92rem;
+    border: 2px solid {BORDER};
+    box-shadow: 0 0 14px {GREEN}33;
+}}
+.greeting-name {{
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: {TEXT};
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+}}
+.greeting-sub {{
+    font-size: 0.86rem;
+    color: {MUTED};
+    line-height: 1.5;
+    max-width: 460px;
+}}
+
+/* ── Suggestion cards ────────────────────────── */
+/* suggest-btn is a sibling marker div; use :has() adjacent selector to reach the button */
+.stElementContainer:has(.suggest-btn) + .stElementContainer .stButton > button,
+.stElementContainer:has(.suggest-btn) + .stElementContainer [data-testid="stBaseButton-secondary"] {{
+    background: {BG3} !important;
+    border: 1px solid {BORDER} !important;
+    border-radius: 18px !important;
+    padding: 20px 18px !important;
+    text-align: left !important;
+    width: 100% !important;
+    min-height: 120px !important;
+    color: #777 !important;
+    font-size: 0.83rem !important;
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+    white-space: normal !important;
+    transition: border-color 0.2s, background 0.2s, color 0.2s !important;
+    box-shadow: none !important;
+    vertical-align: top !important;
+}}
+.stElementContainer:has(.suggest-btn) + .stElementContainer .stButton > button:hover,
+.stElementContainer:has(.suggest-btn) + .stElementContainer [data-testid="stBaseButton-secondary"]:hover {{
+    border-color: {GREEN}55 !important;
+    background: #192914 !important;
+    transform: none !important;
+    box-shadow: 0 8px 24px #00000066 !important;
+    color: {TEXT} !important;
+}}
+.stElementContainer:has(.suggest-btn) + .stElementContainer .stButton > button p {{
+    color: inherit !important;
+    font-size: 0.83rem !important;
+    line-height: 1.6 !important;
 }}
 
 /* ── Chat messages ───────────────────────────── */
@@ -213,11 +271,10 @@ html, body, .stApp {{
     border-radius: 50%; min-width: 24px; height: 24px; margin-top: 2px;
 }}
 
-/* ── ChatGPT-style input bar ─────────────────── */
+/* ── Input bar — pill shape ──────────────────── */
 .input-wrap {{
     position: fixed;
-    bottom: 0;
-    left: 0; right: 0;
+    bottom: 0; left: 0; right: 0;
     background: linear-gradient(to top, {BG} 80%, transparent);
     padding: 12px 24px 20px 24px;
     z-index: 100;
@@ -226,12 +283,12 @@ html, body, .stApp {{
     max-width: 760px;
     margin: 0 auto;
     background: {BG3};
-    border: 1px solid #333;
-    border-radius: 16px;
+    border: 1px solid #2a2a2a;
+    border-radius: 50px;
     display: flex;
     align-items: flex-end;
     gap: 0;
-    padding: 6px 8px 6px 12px;
+    padding: 6px 6px 6px 14px;
     box-shadow: 0 4px 32px #00000077;
     transition: border-color 0.2s;
 }}
@@ -240,14 +297,13 @@ html, body, .stApp {{
     box-shadow: 0 4px 32px {GREEN}11;
 }}
 
-/* ── Upload as "+" icon only — no box ─────────── */
+/* Upload icon */
 .upload-icon-wrap [data-testid="stFileUploader"] {{
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
     margin: 0 !important;
 }}
-/* Entire dropzone becomes the icon button */
 .upload-icon-wrap [data-testid="stFileUploaderDropzone"] {{
     background: transparent !important;
     border: none !important;
@@ -257,18 +313,15 @@ html, body, .stApp {{
     height: 38px !important;
     overflow: hidden !important;
 }}
-/* Hide drag-drop text completely */
 .upload-icon-wrap [data-testid="stFileUploaderDropzoneInstructions"] {{
     display: none !important;
 }}
-/* Hide the SVG cloud icon */
 .upload-icon-wrap [data-testid="stFileUploaderDropzone"] svg {{
     display: none !important;
 }}
-/* Style browse button as "+" circle */
 .upload-icon-wrap [data-testid="stFileUploader"] button {{
-    background: {BG2} !important;
-    border: 1.5px solid {BORDER} !important;
+    background: transparent !important;
+    border: none !important;
     border-radius: 50% !important;
     width: 36px !important;
     height: 36px !important;
@@ -281,12 +334,8 @@ html, body, .stApp {{
     box-shadow: none !important;
 }}
 .upload-icon-wrap [data-testid="stFileUploader"] button:hover {{
-    border-color: {GREEN}88 !important;
     background: #1b2b1b !important;
-    box-shadow: 0 0 10px {GREEN}22 !important;
-    transform: none !important;
 }}
-/* Hide "Browse files" text, replace with + symbol */
 .upload-icon-wrap [data-testid="stFileUploader"] button span {{
     display: none !important;
 }}
@@ -300,12 +349,11 @@ html, body, .stApp {{
 .upload-icon-wrap [data-testid="stFileUploader"] button:hover::after {{
     color: {GREEN};
 }}
-/* Hide size limit note */
 .upload-icon-wrap small {{
     display: none !important;
 }}
 
-/* Text area inside input bar — no border, transparent */
+/* Text area */
 .text-wrap textarea {{
     background: transparent !important;
     border: none !important;
@@ -327,24 +375,24 @@ html, body, .stApp {{
     box-shadow: none !important;
 }}
 
-/* Send button */
+/* Send button — circular green */
 .send-wrap .stButton > button {{
     background: {GREEN} !important;
     color: #000 !important;
     font-weight: 800 !important;
     border: none !important;
-    border-radius: 10px !important;
-    width: 38px !important; height: 38px !important;
+    border-radius: 50% !important;
+    width: 42px !important; height: 42px !important;
     padding: 0 !important;
-    font-size: 1.1rem !important;
+    font-size: 1.15rem !important;
     min-width: unset !important;
-    box-shadow: 0 0 12px {GREEN}44 !important;
+    box-shadow: 0 0 16px {GREEN}55 !important;
     transition: all 0.15s !important;
 }}
 .send-wrap .stButton > button:hover {{
     background: {GLOW} !important;
-    box-shadow: 0 0 20px {GREEN}88 !important;
-    transform: none !important;
+    box-shadow: 0 0 26px {GREEN}99 !important;
+    transform: scale(1.06) !important;
 }}
 .send-wrap .stButton > button:disabled {{
     opacity: 0.25 !important;
@@ -382,34 +430,23 @@ html, body, .stApp {{
     border: 1px solid {GREEN}44; color: {GREEN};
     border-radius: 20px; padding: 2px 9px; font-size: 0.7rem; font-weight: 600; }}
 
-/* Score box */
 .score-box {{
     background: {BG2}; border-radius: 14px;
     padding: 20px; text-align: center; margin: 12px 0;
 }}
 
-/* Auth card */
-.auth-wrap {{ max-width: 400px; margin: 3rem auto; }}
+/* ── Auth screen — STAR.AI splash style ──────── */
 .auth-card {{
-    background: {BG2}; border: 1px solid {BORDER};
-    border-radius: 18px; padding: 2.5rem 2rem;
-    box-shadow: 0 8px 40px #00000066;
+    background: {BG2};
+    border: 1px solid {BORDER};
+    border-radius: 20px;
+    padding: 2rem 1.8rem;
+    box-shadow: 0 8px 40px #00000077;
 }}
-.auth-logo {{ text-align: center; margin-bottom: 1.5rem; }}
-.auth-logo img {{
-    width: 68px; height: 68px; border-radius: 16px;
-    border: 2px solid {GREEN}; padding: 5px; background: #111;
-}}
-.auth-head {{ font-size: 1.3rem; font-weight: 800; color: {GREEN}; text-align:center; }}
-.auth-sub  {{ font-size: 0.78rem; color: {MUTED}; text-align:center; margin-bottom:1.5rem; }}
 
-/* inputs global */
-input[type="text"], input[type="password"] {{
-    background: {BG3} !important; border: 1px solid {BORDER} !important;
-    color: {TEXT} !important; border-radius: 9px !important;
-}}
 .stTabs [data-baseweb="tab-list"] {{
-    background: {BG2}; border-radius: 10px; padding: 3px; gap: 3px;
+    background: {BG3}; border-radius: 10px; padding: 3px; gap: 3px;
+    margin-bottom: 0.5rem;
 }}
 .stTabs [data-baseweb="tab"] {{
     background: transparent; color: {MUTED};
@@ -418,7 +455,31 @@ input[type="text"], input[type="password"] {{
 }}
 .stTabs [aria-selected="true"] {{ background: {GREEN} !important; color: #000 !important; }}
 
-/* Tag */
+/* Start Chatting / auth CTA — full-width green pill (type="primary" buttons) */
+[data-testid="stBaseButton-primary"] {{
+    background: linear-gradient(135deg, {GREEN} 0%, {GLOW} 100%) !important;
+    color: #000 !important;
+    font-weight: 800 !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 14px 24px !important;
+    font-size: 0.95rem !important;
+    width: 100% !important;
+    box-shadow: 0 0 28px {GREEN}44 !important;
+    letter-spacing: 0.3px !important;
+    transition: all 0.2s !important;
+    margin-top: 0.5rem !important;
+}}
+[data-testid="stBaseButton-primary"]:hover {{
+    box-shadow: 0 0 42px {GREEN}66 !important;
+    transform: translateY(-2px) !important;
+}}
+
+input[type="text"], input[type="password"] {{
+    background: {BG3} !important; border: 1px solid {BORDER} !important;
+    color: {TEXT} !important; border-radius: 9px !important;
+}}
+
 .tag {{
     display: inline-block; background: #1b2b1b;
     border: 1px solid {GREEN}44; color: {GLOW};
@@ -426,13 +487,11 @@ input[type="text"], input[type="password"] {{
     font-size: 0.72rem; margin: 3px; font-weight: 600;
 }}
 
-/* Stat card */
 .stat-card {{
     background: {BG2}; border: 1px solid {BORDER};
     border-radius: 12px; padding: 16px; text-align: center;
 }}
 
-/* Image preview chip inside input */
 .img-chip {{
     display: inline-flex; align-items: center; gap: 8px;
     background: {BG2}; border: 1px solid {GREEN}44;
@@ -447,10 +506,14 @@ input[type="text"], input[type="password"] {{
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def get_client():
+    try:
+        secret_key = st.secrets.get("OPENAI_API_KEY", "")
+    except Exception:
+        secret_key = ""
     key = (
         st.session_state.get("api_key")
         or os.getenv("OPENAI_API_KEY")
-        or st.secrets.get("OPENAI_API_KEY", "")
+        or secret_key
     )
     return OpenAI(api_key=key) if key else None
 
@@ -572,25 +635,56 @@ for k, v in defaults.items():
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-#  AUTH SCREEN
+#  AUTH SCREEN  —  STAR.AI splash style
 # ════════════════════════════════════════════════════════════════════════════════
 if st.session_state.user_id is None:
     _, col, _ = st.columns([1, 1.1, 1])
     with col:
+        # Splash — logo with green radial glow
+        b64 = logo_b64()
+        if b64:
+            logo_html = (
+                f'<img src="data:image/png;base64,{b64}" '
+                f'style="width:96px;height:96px;border-radius:24px;'
+                f'border:2px solid {GREEN}88;padding:6px;background:#111;'
+                f'box-shadow:0 0 44px {GREEN}55, 0 0 88px {GREEN}1a;'
+                f'display:block;margin:0 auto;">'
+            )
+        else:
+            logo_html = (
+                f'<div style="width:96px;height:96px;border-radius:24px;'
+                f'background:{GREEN};color:#000;font-weight:900;font-size:1.6rem;'
+                f'display:inline-flex;align-items:center;justify-content:center;'
+                f'margin:0 auto;box-shadow:0 0 44px {GREEN}55;">📷</div>'
+            )
+
         st.markdown(f"""
-        <div class="auth-card">
-          <div class="auth-logo">{logo_img_tag(68,16,2)}</div>
-          <div class="auth-head">PixelPulse Innovation AI</div>
-          <div class="auth-sub">Your AI Photography Coach</div>
+        <div style="position:relative;text-align:center;padding:3.5rem 0 2.2rem 0;overflow:hidden;">
+          <div style="position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);
+                      width:280px;height:280px;
+                      background:radial-gradient(circle, {GREEN}1e 0%, {GREEN}09 45%, transparent 70%);
+                      border-radius:50%;pointer-events:none;"></div>
+          <div style="position:relative;z-index:1;margin-bottom:1.3rem;">{logo_html}</div>
+          <div style="position:relative;z-index:1;font-size:2.1rem;font-weight:900;
+                      color:{GREEN};letter-spacing:1.5px;line-height:1.1;">
+            PixelPulse AI
+          </div>
+          <div style="position:relative;z-index:1;font-size:0.82rem;color:{MUTED};
+                      margin-top:7px;letter-spacing:0.4px;">
+            Your AI Photography Coach
+          </div>
         </div>
         """, unsafe_allow_html=True)
 
+        # Login / Register form card
+        st.markdown('<div class="auth-card">', unsafe_allow_html=True)
+
         t_login, t_reg = st.tabs(["Login", "Create Account"])
+
         with t_login:
-            st.markdown("<br>", unsafe_allow_html=True)
-            u = st.text_input("Username", placeholder="your username", key="li_u")
-            p = st.text_input("Password", type="password", placeholder="••••••••", key="li_p")
-            if st.button("Login →", key="btn_li"):
+            u  = st.text_input("Username", placeholder="your username", key="li_u")
+            p  = st.text_input("Password", type="password", placeholder="••••••••", key="li_p")
+            if st.button("Start Chatting →", key="btn_li", type="primary", use_container_width=True):
                 if u and p:
                     uid = db.login_user(u, p)
                     if uid:
@@ -603,16 +697,17 @@ if st.session_state.user_id is None:
                     st.warning("Please fill in both fields.")
 
         with t_reg:
-            st.markdown("<br>", unsafe_allow_html=True)
-            nu = st.text_input("Username", placeholder="choose a username", key="reg_u")
-            np = st.text_input("Password", type="password", placeholder="min 6 chars", key="reg_p")
+            nu  = st.text_input("Username",         placeholder="choose a username", key="reg_u")
+            np  = st.text_input("Password",         type="password", placeholder="min 6 chars",     key="reg_p")
             np2 = st.text_input("Confirm Password", type="password", placeholder="repeat password", key="reg_p2")
-            if st.button("Create Account →", key="btn_reg"):
-                if np != np2:    st.error("Passwords do not match.")
+            if st.button("Create Account →", key="btn_reg", type="primary", use_container_width=True):
+                if np != np2:  st.error("Passwords do not match.")
                 elif nu and np:
                     ok, msg = db.register_user(nu, np)
                     st.success(msg) if ok else st.error(msg)
-                else:             st.warning("Please fill all fields.")
+                else:          st.warning("Please fill all fields.")
+
+        st.markdown('</div>', unsafe_allow_html=True)   # auth-card
     st.stop()
 
 
@@ -620,16 +715,14 @@ if st.session_state.user_id is None:
 #  SIDEBAR
 # ════════════════════════════════════════════════════════════════════════════════
 with st.sidebar:
-    # Brand — centered
     st.markdown(f"""
     <div class="sb-brand">
-      {logo_img_tag(62,16,2)}
+      {logo_img_tag(56, 14, 2)}
       <div class="sb-name">PixelPulse Innovation AI</div>
       <div class="sb-tagline">Photography Coach</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Navigation
     nav = st.radio("", ["💬  Chat", "🏆  Quiz", "📊  Stats"],
                    key="nav_radio", label_visibility="collapsed")
     page_map = {"💬  Chat": "chat", "🏆  Quiz": "quiz", "📊  Stats": "stats"}
@@ -637,7 +730,6 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Chat history (only when on chat page)
     if st.session_state.page == "chat":
         st.markdown(f"<div style='font-size:0.8rem;font-weight:700;color:{MUTED};padding:0 4px 6px 4px;'>CHAT HISTORY</div>", unsafe_allow_html=True)
         if st.button("＋  New Chat", key="new_chat"):
@@ -668,7 +760,6 @@ with st.sidebar:
                     st.rerun()
         st.markdown("---")
 
-    # API key
     with st.expander("⚙️  API Key", expanded=not bool(get_client())):
         k = st.text_input("OpenAI Key", type="password", placeholder="sk-...", key="api_key")
         if k:
@@ -683,22 +774,12 @@ with st.sidebar:
     st.markdown(f"<div style='font-size:0.65rem;color:#2a2a2a;text-align:center;padding-top:8px;'>PixelPulse Innovation AI</div>", unsafe_allow_html=True)
 
 
-# ── Centered main header ──────────────────────────────────────────────────────
-st.markdown(f"""
-<div class="main-header">
-  {logo_img_tag(56,14,2)}
-  <div class="main-title">PixelPulse Innovation AI</div>
-  <div class="main-sub">AI Photography Coaching · GPT-4o Mini</div>
-</div>
-""", unsafe_allow_html=True)
-
-
 # ════════════════════════════════════════════════════════════════════════════════
 #  CHAT PAGE
 # ════════════════════════════════════════════════════════════════════════════════
 if st.session_state.page == "chat":
-    # Messages
     if st.session_state.messages:
+        # Active chat — clean message list, no header clutter
         for msg in st.session_state.messages:
             if msg["role"] == "user":
                 if msg.get("image_b64"):
@@ -711,21 +792,42 @@ if st.session_state.page == "chat":
             else:
                 st.markdown(f'<div class="ai-row"><span class="ai-avatar">AI</span><div class="bubble-ai">{msg["content"]}</div></div>', unsafe_allow_html=True)
     else:
-        st.markdown(f"""
-        <div style="text-align:center;padding:3rem 0 8rem 0;color:#2a2a2a;">
-          <div style="font-size:3.5rem;margin-bottom:14px;">📷</div>
-          <div style="font-size:1rem;color:#444;">Upload a photo and get instant photography coaching</div>
-          <div style="margin-top:16px;">
-            <span class="tag">Lighting Analysis</span>
-            <span class="tag">Camera Settings</span>
-            <span class="tag">Recreation Guide</span>
-            <span class="tag">Pro Tips</span>
-            <span class="tag">Course Picks</span>
-          </div>
-        </div>""", unsafe_allow_html=True)
+        # Empty state — STAR.AI style greeting + suggestion cards
+        username    = st.session_state.username or "there"
+        first_name  = username.split("_")[0].split(".")[0].title()
+        avatar_init = first_name[0].upper() if first_name else "U"
 
-    # ── ChatGPT-style input bar (fixed bottom) ────────────────────────────────
-    # Show pending image chip if file is loaded
+        st.markdown(f"""
+        <div class="greeting-header">
+          <div class="greeting-top-bar">
+            <div class="premium-badge">✨ Premium</div>
+            <div class="user-avatar">{avatar_init}</div>
+          </div>
+          <div class="greeting-name">Hi {first_name},</div>
+          <div class="greeting-sub">Give me any command, from analysing your shots<br>to coaching you through photography challenges</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Suggestion cards — 2 × 2 grid
+        suggestions = [
+            ("📷", "Analyse the lighting and composition in my portrait shot"),
+            ("✉️", "Help me understand camera settings for golden hour photography"),
+            ("💬", "What's the most important skill for beginner photographers?"),
+            ("🏆", "Give me a fun beginner photography challenge to try today"),
+        ]
+
+        st.markdown("<div style='padding:1.2rem 0 8rem 0;'>", unsafe_allow_html=True)
+        col_a, col_b = st.columns(2, gap="medium")
+        for i, (icon, text) in enumerate(suggestions):
+            with (col_a if i % 2 == 0 else col_b):
+                st.markdown('<div class="suggest-btn">', unsafe_allow_html=True)
+                if st.button(f"{icon}  {text}", key=f"sug_{i}"):
+                    st.session_state["chat_text"] = text
+                    st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Input bar (fixed bottom) ──────────────────────────────────────────────
     if st.session_state.pending_image:
         st.markdown(f"""
         <div style="max-width:760px;margin:0 auto 4px auto;">
@@ -734,7 +836,6 @@ if st.session_state.page == "chat":
           </div>
         </div>""", unsafe_allow_html=True)
 
-    # Input bar wrapper
     st.markdown('<div class="input-wrap"><div class="input-inner">', unsafe_allow_html=True)
 
     col_up, col_txt, col_send = st.columns([1, 14, 1])
@@ -754,7 +855,7 @@ if st.session_state.page == "chat":
 
     with col_txt:
         st.markdown('<div class="text-wrap">', unsafe_allow_html=True)
-        user_text = st.text_area("", placeholder="Message PixelPulse AI…",
+        user_text = st.text_area("", placeholder="Tell me anything…",
                                  height=46, key="chat_text",
                                  label_visibility="collapsed")
         st.markdown('</div>', unsafe_allow_html=True)
@@ -774,13 +875,13 @@ if st.session_state.page == "chat":
             st.error("Please enter your OpenAI API key in the sidebar.")
         else:
             img_data = st.session_state.pending_image
-            image = img_data["image"] if img_data else None
-            img_b64 = img_data["b64"] if img_data else None
-            text = user_text.strip() or "Analyse this photo."
+            image    = img_data["image"] if img_data else None
+            img_b64  = img_data["b64"]   if img_data else None
+            text     = user_text.strip() or "Analyse this photo."
 
             if st.session_state.current_session_id is None:
                 title = (img_data["name"].rsplit(".",1)[0][:40] if img_data else text[:40]) or "Chat"
-                sid = db.create_session(st.session_state.user_id, title)
+                sid   = db.create_session(st.session_state.user_id, title)
                 st.session_state.current_session_id = sid
 
             db.add_message(st.session_state.current_session_id, "user", text, img_b64)
@@ -850,7 +951,7 @@ elif st.session_state.page == "quiz":
                 else:
                     with st.spinner("Evaluating…"):
                         try:
-                            img = Image.open(qf)
+                            img    = Image.open(qf)
                             result = evaluate_submission(client, img, ch)
                             score, passed = parse_score(result)
                             db.save_quiz_attempt(st.session_state.user_id, ch["title"],
@@ -860,7 +961,7 @@ elif st.session_state.page == "quiz":
                             st.error(f"Evaluation failed: {e}")
 
         if st.session_state.quiz_result:
-            r = st.session_state.quiz_result
+            r  = st.session_state.quiz_result
             sc = GREEN if r["passed"] else "#e74c3c"
             lbl = "PASSED ✓" if r["passed"] else "NOT YET ✗"
             st.markdown(f"""
@@ -873,14 +974,14 @@ elif st.session_state.page == "quiz":
 
         if st.button("← Back to Challenges", key="back"):
             st.session_state.active_challenge = None
-            st.session_state.quiz_result = None
+            st.session_state.quiz_result      = None
             st.rerun()
     else:
         st.markdown("#### 🏆 Photography Challenges")
         st.markdown(f"<small style='color:{MUTED}'>Upload your attempt and get AI feedback scored out of 10.</small>", unsafe_allow_html=True)
         st.markdown("")
 
-        diff = st.segmented_control("Difficulty", ["All","Beginner","Intermediate","Advanced"], default="All")
+        diff     = st.segmented_control("Difficulty", ["All","Beginner","Intermediate","Advanced"], default="All")
         filtered = CHALLENGES if diff == "All" else [c for c in CHALLENGES if c["difficulty"] == diff]
 
         c1, c2 = st.columns(2, gap="medium")
@@ -900,7 +1001,7 @@ elif st.session_state.page == "quiz":
                 st.markdown('<div class="main-btn">', unsafe_allow_html=True)
                 if st.button("Start Challenge →", key=f"start_{ch['id']}"):
                     st.session_state.active_challenge = ch
-                    st.session_state.quiz_result = None
+                    st.session_state.quiz_result      = None
                     st.rerun()
                 st.markdown('</div>', unsafe_allow_html=True)
 
@@ -910,17 +1011,17 @@ elif st.session_state.page == "quiz":
 # ════════════════════════════════════════════════════════════════════════════════
 elif st.session_state.page == "stats":
     st.markdown(f"#### 📊 {st.session_state.username}'s Progress")
-    stats = db.get_quiz_stats(st.session_state.user_id)
+    stats   = db.get_quiz_stats(st.session_state.user_id)
     history = db.get_quiz_history(st.session_state.user_id)
     total_xp = sum(ch["xp"] for a in history for ch in CHALLENGES
                    if ch["title"] == a[0] and a[3])
 
-    c1,c2,c3,c4 = st.columns(4)
+    c1, c2, c3, c4 = st.columns(4)
     for col, label, val, color in [
-        (c1, "Attempted",    stats["total"],       TEXT),
-        (c2, "Passed",       stats["passed"],      GREEN),
-        (c3, "Avg Score",    f"{stats['avg_score']}/10", GREEN),
-        (c4, "XP Earned",    f"{total_xp}",        GREEN),
+        (c1, "Attempted",  stats["total"],            TEXT),
+        (c2, "Passed",     stats["passed"],            GREEN),
+        (c3, "Avg Score",  f"{stats['avg_score']}/10", GREEN),
+        (c4, "XP Earned",  f"{total_xp}",             GREEN),
     ]:
         with col:
             st.markdown(f"""
@@ -937,8 +1038,8 @@ elif st.session_state.page == "stats":
     if history:
         st.markdown("**📜 Quiz History**")
         for title, diff, score, passed, created in history:
-            dc = DIFFICULTY_COLOR.get(diff, GREEN)
-            sc = GREEN if passed else "#e74c3c"
+            dc   = DIFFICULTY_COLOR.get(diff, GREEN)
+            sc   = GREEN if passed else "#e74c3c"
             icon = "✅" if passed else "❌"
             st.markdown(f"""
             <div style="background:{BG2};border:1px solid {BORDER};border-radius:10px;
